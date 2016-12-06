@@ -2,32 +2,20 @@
 
 **安装步骤**
 > 1、克隆代码到本地<br/>
-```php
-git clone https://git.oschina.net/buexplain/laravel-rbac.git
+```bash
+git clone https://github.com/buexplain/mechat.git
 ```
 2、执行安装命令<br/>
-```php
-cd laravel-rbac && composer install
+```bash
+cd mechat && npm install
 ```
-3、修改数据库配置<br/>
-```php
-vi .env
+3、启动服务器<br/>
+```bash
+node server.js
 ```
-4、运行迁移<br/>
-```php
-php artisan migrate
-```
-5、运行数据填充<br/>
-```php
-php artisan db:seed
-```
-6、启动内置服务器
-```php
-php artisan serve
-```
-7、浏览器访问
-```php
-http://localhost:8000/admin/signin
+4、浏览器访问
+```bash
+http://localhost:3000/
 ```
 
 **License**
