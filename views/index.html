@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="Generator" content="EditPlus®">
+<meta name="Author" content="梦想星辰大海">
+<meta name="Keywords" content="在线,聊天室,交流群">
+<meta name="Description" content="web在线聊天室">
+<title>老司机交友群</title>
+<link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <div class="wrap">
+        <div class="header">
+            老司机交友群
+        </div>
+
+        <div class="main" id="main">
+        </div>
+
+        <div class="footer">
+            <div class="tool">
+                <div class="smile-img" id="smile-img" style="display:none;">
+                </div>
+                <a class="send" href="javascript:;" title="send message" onclick="mechat.send()"></a>
+                <a class="smile" href="javascript:;" title="add smile" onclick="mechat.showSmile()"></a>
+                <a class="rename" href="javascript:;" title="set nickname" onclick="mechat.setNickname(0)"></a>
+                <a class="scissors" href="javascript:;" title="printscreen help" onclick="mechat.scissors()"></a>
+                <a class="clear" href="javascript:;" title="clear screen" onclick="mechat.clearScreen()"></a>
+            </div>
+            <div class="msg-warp">
+                <textarea placeholder="按Enter+Ctrl发送" maxlength="300" onKeyUp="mechat.shortcutSendMsg(event)" id="new-msg"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script src="socket.io/socket.io.js"></script>
+    <script src="js/chat.js"></script>
+    <script>
+        var mechat = new chat();
+
+        window.onload = function() {
+            mechat.init('http://localhost:3000/');
+        }
+    </script>
+
+</body>
+</html>
