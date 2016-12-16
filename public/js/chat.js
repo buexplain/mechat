@@ -22,6 +22,110 @@ var cookie = {
     }
 };
 
+
+/**
+ * 转换特殊字符为HTML实体
+ * @link http://www.cnblogs.com/leejersey/p/4568092.html
+ */
+var convertHTML = {
+    encode: function(sHtml) {
+        var list = {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'};
+        return sHtml.replace(/[<>&"]/g,function(c){
+            return list[c];
+        });
+    },
+    decode: function(str) {
+        var list={'lt':'<','gt':'>','nbsp':' ','amp':'&','quot':'"'};
+        return str.replace(/&(lt|gt|nbsp|amp|quot);/ig,function(all,t){
+            console.log(t);
+            return list[t];
+        });
+    }
+};
+
+/**
+ * map类型数据构造函数
+ */
+function map() {
+    var _map = {};
+    var _len = 0;
+    /**
+     * 添加一个元素
+     */
+    this.add = function(k,v) {
+        _map[k] = v;
+        ++_len;
+    };
+
+    /**
+     * 返回容器中的所有数据
+     */
+    this.all = function() {
+        return _map;
+    };
+
+    /**
+     * 获取一个元素
+     */
+    this.get = function(k) {
+        if(this.isset(k)) {
+            return _map[k];
+        }
+        return null;
+    };
+
+    /**
+     * 获取并元素并从容器中删除
+     */
+    this.pull = function(k) {
+        if(this.isset(k)) {
+            --_len;
+            var tmp = _map[k];
+            delete _map[k];
+            return tmp;
+        }
+        return null;
+    };
+
+    /**
+     * 删除一个或整个元素
+     */
+    this.del = function(k) {
+        if(k == undefined) {
+            _map = {};
+            _len = 0;
+        }else{
+            if(this.isset(k)) {
+                delete _map[k];
+                --_len;
+            }
+        }
+    };
+
+    /**
+     * 返回map长度
+     */
+    this.len = function() {
+        return _len;
+    };
+
+    /**
+     * 遍历整个map
+     */
+    this.each = function(callfunc) {
+        for(var i in _map) {
+            callfunc(i,_map[i]);
+        }
+    };
+
+    /**
+     * 判断元素是否存在
+     */
+    this.isset = function(k) {
+        return _map.hasOwnProperty(k);
+    };
+}
+
 /**
  * 聊天构造类
  */
@@ -29,7 +133,7 @@ function chat() {
     var _me        = ''; //当前对象的名称
     var _that      = this; //当前对象
     var _main      = null;
-    var _textarea  = null;
+    var _msgInput  = null;
     var _socket    = null;
     var _nickname  = '';
     var _nicknameK = '__nickname';
@@ -59,8 +163,9 @@ function chat() {
         '23.jpg',
         '24.jpg'
     ];
-    var _smileID   = '';
-    var _smileURL  = '';
+    var _smileID     = '';
+    var _smileURL    = '';
+    var _imgBase64 = new map();
 
     /**
      * 弹出javascript输入框
@@ -113,21 +218,16 @@ function chat() {
     /**
      * 解析消息中的表情地址
      */
-    function _parseSmile(s) {
+    function _parseSmile(s,callfunc) {
         var reg = /\[.*?\]/g;
-        return s.replace(reg, function(tmp) {
-            var tmp = tmp.substr(1,tmp.length-2).split('_');
-
-            var img = tmp[1];
-            var type = tmp[0];
-
-            var result = '';
-
-            if(type == 'em') {
-                result = '<img class="smile" src="'+_smileURL+img+'">';
+        return s.replace(reg, function(input) {
+            var input = input.substr(1,input.length-2);
+            var tmp = input.split('_');
+            if(_isset(tmp,0) && _isset(tmp,1)) {
+                return callfunc(tmp[0],input.substr(tmp[0].length+1,input.length));
+            }else{
+                return '';
             }
-
-            return result;
         });
     }
 
@@ -159,6 +259,55 @@ function chat() {
 
         //开始读取文件
         reader.readAsDataURL(blob);
+    }
+
+    /**
+     * 判断对象或数组中是否存在某个下标
+     */
+    function _isset(obj,key) {
+        var key = (key.toString()).split('.');
+        var flag = true;
+        for(var i in key) {
+            if(obj.hasOwnProperty(key[i]) === false) {
+                flag = false;
+                break;
+            }
+            obj = obj[key[i]];
+        }
+        return flag;
+    }
+
+    /**
+     * 回车转为br标签
+     */
+    function _return2br(str) {
+        return str.replace(/\r?\n/g,"<br>");
+    }
+
+    /**
+     * 去除开头结尾换行,并将连续3次以上换行转换成2次换行
+     */
+    function _trimbr(str) {
+        str=str.replace(/((\s|&nbsp;)*\r?\n){3,}/g,"\r\n\r\n");//限制最多2次换行
+        str=str.replace(/^((\s|&nbsp;)*\r?\n)+/g,'');//清除开头换行
+        str=str.replace(/((\s|&nbsp;)*\r?\n)+$/g,'');//清除结尾换行
+        return str;
+    }
+
+    /**
+     * 将空格转成html空格
+     */
+    function _space2nbsp(str) {
+        var reg = new RegExp("\x20",'g');
+        return str.replace(reg, '&nbsp;');
+    }
+
+    /**
+     * 将tab转成html空格
+     */
+    function _tab2nbsp(str) {
+        var reg = new RegExp("\x09",'g');
+        return str.replace(reg, '&nbsp;&nbsp;&nbsp;&nbsp;');
     }
 
     /**
@@ -224,8 +373,8 @@ function chat() {
      * 插入表情到消息输入框
      */
     this.insertSmile = function(img) {
-        _textarea.focus();
-        _textarea.value = _textarea.value + '[em_'+img+']';
+        _msgInput.focus();
+        _msgInput.value = _msgInput.value + '[em_'+img+']';
     };
 
     /**
@@ -271,12 +420,6 @@ function chat() {
      * @param  isSelf   是否为自己的消息
      */
     this.appendUserMsg = function(nickname,msg,isSelf) {
-        if(msg.substr(0,'data:image'.length) == 'data:image') {
-            msg = '<img onclick="'+this.myName()+'.showImg(this)" src="'+msg+'">';
-        }else{
-            msg = _parseSmile(msg);
-        }
-
         var html = '';
         html += '<div class="user-info">';
         html += '    <span class="nickname">'+nickname+'</span>';
@@ -295,21 +438,41 @@ function chat() {
      * 发送消息
      */
     this.send = function() {
-        _textarea.focus();
-        var val = _textarea.value;
-        _textarea.value = '';
+        var val = _tab2nbsp(_space2nbsp(_return2br(convertHTML.encode(_trimbr(_msgInput.value)))));
+        //存在输入
         if(val.length>0) {
-            this.appendUserMsg(this.getNickname(),val,1);
-            _socket.emit('message',{msg:val});
-            this.showSmile('none');
+            //解析表情
+            val = _parseSmile(val,function(type,value) {
+                var result = '';
+                if(type == 'em') {
+                    result = '<img class="smile" src="'+_smileURL+value+'">';
+                }else if(type == 'base64' && _imgBase64.isset(value)) {
+                    result = '<img title="单击查看大图" class="imgbase64" onclick="'+_that.myName()+'.showImg(this)" src="'+_imgBase64.pull(value)+'">';
+                }
+                return result;
+            });
+            if(val.length>0) {
+                //插入自己的消息到列表
+                this.appendUserMsg(this.getNickname(),val,1);
+                //发送消息
+                _socket.emit('message',{msg:val});
+            }
         }
+        //清空消息输入框
+        _msgInput.value = '';
+        //清空图片容器
+        _imgBase64.del();
+        //隐藏表情栏
+        this.showSmile('none');
+        //将焦点重新打到消息输入框
+        _msgInput.focus();
     };
 
     /**
      * 快捷键发送消息
      */
     this.shortcutSendMsg = function (event) {
-        if(event.ctrlKey&&event.keyCode==13) {
+        if(event.keyCode==13) {
             this.send();
         }
     };
@@ -317,7 +480,7 @@ function chat() {
     /**
      * 发送截图
      */
-    this.sendImg = function(e) {
+    this.pasteImg = function(e) {
         var clipboardData = e.clipboardData;
 
         if(clipboardData) {
@@ -326,10 +489,26 @@ function chat() {
 
             if(item) {
                 _readerImg(item,function(result) {
-                    _textarea.value = result;
-                    _that.send();
+                    var tmp = _imgBase64.len();
+                    _imgBase64.add(tmp,result);
+                    _msgInput.value += '[base64_'+(tmp).toString()+']';
                 });
             }
+        }
+    };
+
+    /**
+     * 上传图片
+     */
+    this.upimg = function(obj) {
+        if(obj.files.length) {
+            var reader = new FileReader();
+            reader.readAsDataURL(obj.files[0]);
+            reader.onload = function(e) {
+                _imgBase64.add(obj.value,e.target.result);
+                _msgInput.value += '[base64_'+(obj.value).toString()+']';
+                obj.value = '';
+            };
         }
     };
 
@@ -360,15 +539,17 @@ function chat() {
         /**
          * 消息输入框
          */
-        _textarea = document.getElementById("new-msg");
+        _msgInput = document.getElementById("new-msg");
 
-        //创建表情
+        /**
+         * 创建表情
+         */
         this.createSmile('smile-img','/img/smile/');
 
         /**
          * 监听粘贴事件
          */
-        _textarea.addEventListener('paste', _that.sendImg);
+        _msgInput.addEventListener('paste', _that.pasteImg);
 
         /**
          * 连接服务器

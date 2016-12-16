@@ -20,16 +20,18 @@
 
         <div class="footer">
             <div class="tool">
-                <div class="smile-img" id="smile-img" style="display:none;">
-                </div>
-                <a class="send" href="javascript:;" title="send message" onclick="mechat.send()"></a>
-                <a class="smile" href="javascript:;" title="add smile" onclick="mechat.showSmile()"></a>
-                <a class="rename" href="javascript:;" title="set nickname" onclick="mechat.setNickname(0)"></a>
-                <a class="scissors" href="javascript:;" title="printscreen help" onclick="mechat.scissors()"></a>
-                <a class="clear" href="javascript:;" title="clear screen" onclick="mechat.clearScreen()"></a>
+                <div class="smile-img" id="smile-img" style="display:none;"></div>
+                <a class="send" href="javascript:;" title="发送消息" onclick="mechat.send()"></a>
+                <a class="smile" href="javascript:;" title="插入表情" onclick="mechat.showSmile()"></a>
+                <label class="upimg" href="javascript:;" title="上传图片" for="imginput">
+                    <input id="imginput" type="file" accept="image/*" onchange="mechat.upimg(this)">
+                </label>
+                <a class="rename" href="javascript:;" title="设置昵称" onclick="mechat.setNickname(0)"></a>
+                <a class="scissors" href="javascript:;" title="截图帮助" onclick="mechat.scissors()"></a>
+                <a class="clear" href="javascript:;" title="清空聊天记录" onclick="mechat.clearScreen()"></a>
             </div>
             <div class="msg-warp">
-                <textarea placeholder="按Enter+Ctrl发送" maxlength="300" onKeyUp="mechat.shortcutSendMsg(event)" id="new-msg"></textarea>
+                <textarea placeholder="按Enter+Ctrl发送" maxlength="1000" onKeyUp="mechat.shortcutSendMsg(event)" id="new-msg"></textarea>
             </div>
         </div>
     </div>

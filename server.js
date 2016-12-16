@@ -49,9 +49,11 @@ io.on('connection', function (socket) {
      * 用户离线
      */
     socket.on('disconnect', function() {
-        socket.broadcast.emit('sysmsg', {
-            msg:socket.nickname+' 已离开！'
-        });
+        if(socket.nickname != undefined) {
+            socket.broadcast.emit('sysmsg', {
+                msg:socket.nickname+' 已离开！'
+            });
+        }
     });
 
     /**

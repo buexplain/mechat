@@ -75,9 +75,14 @@ body{
     margin:3px;
 }
 
-.main .msg-body .smile {
+.main .msg-body .smile{
     max-width: 180px;
     max-height: 180px;
+}
+
+.main .msg-body .imgbase64{
+    max-width: 700px;
+    max-height: 1200px;
 }
 
 /*他人的消息*/
@@ -146,6 +151,7 @@ body{
 .footer .tool{
     margin-top: 5px;
     position: relative;
+    background-color: #ebebeb;
 }
 
 .footer .smile-img {
@@ -170,6 +176,7 @@ body{
 .footer .smile,
 .footer .send,
 .footer .scissors,
+.footer .upimg,
 .footer .rename{
     display: inline-block;
     height: 24px;
@@ -178,11 +185,11 @@ body{
 }
 
 .footer .clear{
-    background:url(../img/clear.png) no-repeat;
+    background:url(../img/clear.png) no-repeat scroll 0px -2px;;
 }
 
 .footer .smile{
-    background:url(../img/smile.png) no-repeat scroll 0 0px;
+    background:url(../img/smile.png) no-repeat scroll 0px 0px;
 }
 
 .footer .send{
@@ -197,6 +204,15 @@ body{
     background:url(../img/rename.png) no-repeat scroll 0px 0px;
 }
 
+.footer .upimg{
+    background:url(../img/upimg.png) no-repeat scroll 0px -3px;
+}
+
+.footer .upimg input{
+    position: absolute;
+    z-index: -1;
+}
+
 
 /*发送消息*/
 .footer .msg-warp textarea{
@@ -204,6 +220,5 @@ body{
     padding:2px 5px;
     border: none;
     color: #4A4A4A;
-    height: 100px;
-    resize: none;
+    height: 80px;
 }
