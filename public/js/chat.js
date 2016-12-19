@@ -1,4 +1,11 @@
 /**
+ * 获取屏幕可视区域高度
+ */
+function getViewPortHeight() {
+    return document.documentElement.clientHeight || document.body.clientHeight;
+}
+
+/**
  * cookie读写
  */
 var cookie = {
@@ -132,7 +139,7 @@ function map() {
 function chat() {
     var _me        = ''; //当前对象的名称
     var _that      = this; //当前对象
-    var _main      = null;
+    var _msgList      = null;
     var _msgInput  = null;
     var _socket    = null;
     var _nickname  = '';
@@ -197,14 +204,14 @@ function chat() {
      */
     function _append(html) {
         var item = document.createElement('div');
-        item.setAttribute('class','list-item');
+        item.setAttribute('class','m-msg_item');
 
         item.innerHTML = html;
 
-        _main.appendChild(item);
+        _msgList.appendChild(item);
 
         setTimeout(function() { //延迟滚动滚动条
-            _main.scrollTop = _main.scrollHeight - _main.clientHeight;
+            _msgList.scrollTop = _msgList.scrollHeight - _msgList.clientHeight;
         },300);
     }
 
@@ -398,7 +405,7 @@ function chat() {
      * 清空消息容器
      */
     this.clearScreen = function() {
-        _main.innerHTML = '';
+        _msgList.innerHTML = '';
     };
 
     /**
@@ -472,7 +479,7 @@ function chat() {
      * 快捷键发送消息
      */
     this.shortcutSendMsg = function (event) {
-        if(event.keyCode==13) {
+        if(event.ctrlKey&&event.keyCode==13) {
             this.send();
         }
     };
@@ -534,17 +541,17 @@ function chat() {
         /**
          * 消息容器
          */
-        _main = document.getElementById('main');
+        _msgList = document.getElementById('j-msg_list');
 
         /**
          * 消息输入框
          */
-        _msgInput = document.getElementById("new-msg");
+        _msgInput = document.getElementById("j-msg_input");
 
         /**
          * 创建表情
          */
-        this.createSmile('smile-img','/img/smile/');
+        this.createSmile('j-smile_img','/img/smile/');
 
         /**
          * 监听粘贴事件

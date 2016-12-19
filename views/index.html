@@ -2,25 +2,30 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="Generator" content="EditPlus®">
 <meta name="Author" content="梦想星辰大海">
 <meta name="Keywords" content="在线,聊天室,交流群">
 <meta name="Description" content="web在线聊天室">
 <title>老司机交友群</title>
+<link rel="stylesheet" href="css/reset.css">
+<link rel="stylesheet" href="css/function.css">
 <link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="css/media.css">
 </head>
 <body>
-    <div class="wrap">
-        <div class="header">
+    <div class="g-wrap">
+        <div class="g-smile_img" id="j-smile_img" style="display:none;"></div>
+
+        <div class="g-hd" id="j-hd">
             老司机交友群
         </div>
 
-        <div class="main" id="main">
+        <div class="g-bd" id="j-msg_list">
         </div>
 
-        <div class="footer">
-            <div class="tool">
-                <div class="smile-img" id="smile-img" style="display:none;"></div>
+        <div class="g-ft" id="j-ft">
+            <div class="m-menu">
                 <a class="send" href="javascript:;" title="发送消息" onclick="mechat.send()"></a>
                 <a class="smile" href="javascript:;" title="插入表情" onclick="mechat.showSmile()"></a>
                 <label class="upimg" href="javascript:;" title="上传图片" for="imginput">
@@ -30,8 +35,8 @@
                 <a class="scissors" href="javascript:;" title="截图帮助" onclick="mechat.scissors()"></a>
                 <a class="clear" href="javascript:;" title="清空聊天记录" onclick="mechat.clearScreen()"></a>
             </div>
-            <div class="msg-warp">
-                <textarea placeholder="按Enter+Ctrl发送" maxlength="1000" onKeyUp="mechat.shortcutSendMsg(event)" id="new-msg"></textarea>
+            <div class="m-ipt">
+                <textarea placeholder="按Enter+Ctrl发送" maxlength="1000" onKeyUp="mechat.shortcutSendMsg(event)" id="j-msg_input"></textarea>
             </div>
         </div>
     </div>
@@ -40,10 +45,12 @@
     <script src="js/chat.js"></script>
     <script>
         var mechat = new chat();
-
         window.onload = function() {
+            var tmp = (getViewPortHeight() - document.getElementById('j-hd').clientHeight - document.getElementById('j-ft').clientHeight - 10).toString() +'px';
+            document.getElementById('j-smile_img').style.height = tmp;
+            document.getElementById('j-msg_list').style.height  = tmp;
             mechat.init();
-        }
+        };
     </script>
 
 </body>
