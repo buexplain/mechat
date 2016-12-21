@@ -88,7 +88,7 @@ body{
     margin-left: 10px;
     overflow-wrap: break-word;
     padding: 5px;
-    width: 93%;
+    max-width: 93%;
 }
 
 .m-msg_item .msg-body span img {
