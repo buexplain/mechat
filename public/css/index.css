@@ -1,65 +1,51 @@
-/*body,textarea{
-    font-size: 0.8rem;
-}
-
 body{
     background-color: #ebebeb;
-}*/
-/*
-.clear:after{ display: block; content: ''; font-size: 0; height: 0; clear:both;}
-.clear{ *zoom:1;}*/
-
-
-body{
-    background-color: #ebebeb;
-    padding: 0 5px 0 5px;
+    font-size: 62.5%;/*10 ÷ 16 × 100% = 62.5%*/
 }
 
 /*大容器*/
 .g-wrap {
-    width: 800px;
+    min-width: 320px;
+    max-width: 750px;
     margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 6px 6px 0 0;
+    overflow: hidden;
     position: relative;
 }
 
 /*头部*/
 .g-hd{
-    height: 50px;
-    background-color: #538FFF;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     color: #fff;
+    height: 50px;
     line-height: 50px;
-    padding-left:20px;
-    border-radius: 6px 6px 0 0;
+    background-color: #538FFF;
 }
 
 /*消息列表容器*/
 .g-bd{
     background-color: #fff;
-    border: 1px solid #ccc;
-    height: 500px;
-    padding: 0 5px;
+    padding: 0 10px;
     overflow-x: hidden;
     overflow-y: auto;
+    font-size: 1rem;
 }
 
 /*底部*/
 .g-ft{
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
+    font-size: 1rem;
 }
 
-
+/**
+ * 表情图片
+ */
 .g-smile_img {
-    z-index: 1;
-    background: #ccc none repeat scroll 0 0;
-    border: 1px solid #fff;
-    height: 50%;
+    background-color: #ebebeb;
     overflow: auto;
-    padding: 3px;
     position: absolute;
     top: 50px;
-    width: 98%;
+    z-index: 1;
 }
 
 .g-smile_img img {
@@ -69,15 +55,14 @@ body{
     padding: 3px;
 }
 
-
 /*消息列表*/
 .m-msg_item {
     margin: 10px 0 10px 0;
+    overflow: hidden;
 }
 
 /*用户消息*/
 .m-msg_item .user-info{
-    margin-left: 4px;
     margin-bottom: 10px;
 }
 
@@ -96,20 +81,18 @@ body{
 }
 
 .m-msg_item .msg-body span {
-    /*border:1px solid #ccc;*/
-    color: #1f2702;
-    padding:5px;
     border-radius: 6px;
+    color: #1f2702;
     display: inline-block;
     line-height: 20px;
-    margin-left: 14px;
-    overflow-x: hidden;
-    max-width: 90%;
+    margin-left: 10px;
+    overflow-wrap: break-word;
+    padding: 5px;
+    width: 93%;
 }
 
 .m-msg_item .msg-body span img {
     max-width: 100%;
-    margin:3px;
 }
 
 .m-msg_item .msg-body .smile{
@@ -119,7 +102,7 @@ body{
 
 .m-msg_item .msg-body .imgbase64{
     max-width: 100%;
-    max-height: 1200px;
+    max-height: 1000px;
 }
 
 /*他人的消息*/
@@ -158,7 +141,7 @@ body{
     border-radius: 6px;
     color: #fff;
     display:inline-block;
-    padding: 4px 5px;
+    padding: 5px;
 }
 
 /*三角按钮*/
@@ -170,7 +153,7 @@ body{
     border-style: solid;
     border-color: transparent;
     position: absolute;
-    left: 18px;
+    left: 15px;
     border-bottom-color: #ccc;
     top: -14px;
 }
@@ -181,8 +164,9 @@ body{
 }
 
 .m-menu{
-    margin-top: 5px;
     background-color: #ebebeb;
+    height: 30px;
+    line-height: 45px;
 }
 
 .m-menu .clear,
@@ -229,9 +213,13 @@ body{
 }
 
 /*发送消息*/
+.m-ipt {
+    background-color: #fff;
+    height: 100px;
+}
 .m-ipt textarea{
-    width: 100%;
-    border: none;
-    color: #4A4A4A;
-    height: 80px;
+    border: medium none;
+    padding: 2px;
+    width: 99%;
+    height: 96%;
 }
