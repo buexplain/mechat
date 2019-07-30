@@ -9,6 +9,10 @@ git clone https://github.com/buexplain/mechat.git
 ```bash
 cd mechat && npm install
 ```
+如果不行那就换
+```bash
+yarn
+```
 3、启动服务器<br/>
 ```bash
 node server.js
